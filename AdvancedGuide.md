@@ -6,19 +6,19 @@ This advanced guide includes tips and tricks, and also solutions to common issue
 
 ### Where is the signature field?
 
-There are a few variants of electronic signatures available on Form, all of which, according to the Electronic Transactions Act, are not legally weaker than a wet ink signature. Agencies such as IRAS and MOM have used the following for electronic signatures: a) an NRIC field, b) an attachment of a wet ink signature and c) SingPass Login. 
+There are a few variants of electronic signatures available on Form, all of which, according to the Electronic Transactions Act, are not legally weaker than a wet ink signature. Agencies such as IRAS and MOM have used the following for electronic signatures: a) an NRIC field, b) an attachment of a wet ink signature and c) SingPass Login.
 
 ### Is there an address field? How can I auto-populate one?
 
 You may create a Postal code field with Short Text that validates 6 characters, together with a few more fields for block and unit numbers. Do not use a Number field for Postal code as Numbers cannot start with zero. If verified addresses are needed, you may enable SingPass on your form, and drag in a Registered Address MyInfo field.
 
-### When should I use a radio button vs a dropdown field? 
+### When should I use a radio button vs a dropdown field?
 
 For 6 or fewer choices, it is advised to use a radio button, as there are only a few options to display:
 
 ![FormSG FAQ Radio Button](https://s3-ap-southeast-1.amazonaws.com/misc.form.gov.sg/faq-radio.png "FormSG FAQ Radio Button")
 
-For >6 choices, you should use a dropdown field: 
+For >6 choices, you should use a dropdown field:
 
 ![FormSG FAQ Dropdown](https://s3-ap-southeast-1.amazonaws.com/misc.form.gov.sg/faq-dropdown.png "FormSG FAQ Dropdown")
 
@@ -30,6 +30,36 @@ Yes it can. Form title has to be in English, but instructions and fields can be 
 
 The current size limit is 7 MB for the entire form. We auto-compress images to 1024x768 resolution, which is typically less than 1 MB. This is a hard limit because the email service we use has a fixed 10 MB outgoing size, and we buffer 3 MB for email fields and metadata. Because the smallest unit you can attach per attachment field is 1 MB, you can have a max of 7 attachments on your form. If your user has to submit more than 7 documents, you may create just one attachment field of 7 MB, and advise your user to zip documents up and submit as one attachment. Now that Storage mode is launched, we have plans in Q3 2020 to increase attachment size limit to 20 MB.
 
+## Prefill
+
+### What is prefill?
+
+Prefill is a convenience feature that allows you to pre-populate fields for your form user. This adds convenience and reduces the chance of mistakes in manual entry. Examples where prefill has been used include populating form serial numbers.
+
+### How do I use it?
+
+Step 1: In the short text field, activate the Enable pre-fill toggle. Note that the Field ID is only generated after the field has been saved for the first time.
+
+![FormSG FAQ Prefill Admin Console](https://s3-ap-southeast-1.amazonaws.com/misc.form.gov.sg/faq-admin-prefill.png "FormSG FAQ Prefill Admin Console")
+
+Step 2: In your form url, append ?<Field ID>=<Your prefilled value> to the end of the URL. For example, if your form URL is https://www.forms.gov.sg/6079216d5efcf5002c523299 and the Field ID is 6080d2ab13daf3002bfcd32d, then the prefilled URL would be https://www.forms.gov.sg/6079216d5efcf5002c523299?6080d2ab13daf3002bfcd32d=Some prefilled value. Spaces are allowed in the prefilled value.
+
+Step 3: Share the prefilled URL with your user. The prefilled fields will be highlighted in the form.
+
+![FormSG FAQ Prefill Form](https://s3-ap-southeast-1.amazonaws.com/misc.form.gov.sg/faq-prefilled-form-sample.png "FormSG FAQ Prefill Form")
+
+### Can I have more than one prefilled value?
+
+Yes. In that case, you should separate the Field ID / Prefilled Value pairs with an ampersand &. For example, if there are two prefilled values, then append ?<Field ID 1>=<Your prefilled value 1>&<Field ID 2>=<Your prefilled value 2> to the end of the form URL.
+
+### Can form users modify the prefilled value(s)?
+
+Yes, form users are able to change the prefilled value(s), similar to all other text fields. Therefore, you should not rely on prefill for any form of authentication / verification.
+
+### Is prefill available for all fields?
+
+Prefill is currently available for short text fields. We may extend this to other field types in future.
+
 ## Form logic
 
 ### How do I know if the logic for the form is correct?
@@ -38,7 +68,7 @@ When you implement a new logic, you should test it yourself via the preview page
 
 ![FormSG FAQ Logic](https://s3-ap-southeast-1.amazonaws.com/misc.form.gov.sg/faq-logic.png "FormSG FAQ Logic")
 
-### How do I route responses to different emails based on form option selected? 
+### How do I route responses to different emails based on form option selected?
 
 This might apply for an enquiry form. If user chooses "Complaint" response should route to Complaints Department, but if user chooses "IT" response should route to IT Department. There's no such feature within the Form interface, but you can set mail forwarding rules on your email. For example, one such rule can detect "Complaint" in the form response email, and forward this to the Complaints Department automatically.
 
@@ -56,13 +86,14 @@ Click on the underlined "people or public group" and specify the IT department's
 
 ### What is Storage mode?
 
-Storage mode is a method of receiving form responses. Form admins can choose between `Storage mode` and `Email mode` for each form. 
+Storage mode is a method of receiving form responses. Form admins can choose between `Storage mode` and `Email mode` for each form.
 
 Under Storage mode, form administrators can view responses within form.gov.sg and export collated responses in spreadsheet format. To access these responses, form administrators must first enter a secret key that was generated upon form creation.
 
 All responses are stored in encrypted format, meaning no one except form administrators will be able to view or download responses. Storage mode is permissible for data up to "Restricted" classification and "Sensitive Normal" sensitivity.
 
 Note: The following features are currently **not available** in Storage mode. If you need to use these features with your form, please select Email mode.
+
 - MyInfo fields
 - Emailed copy of response to respondent
 
@@ -74,7 +105,8 @@ Respondents can use any browser to submit a form on Storage mode. For form admin
 
 Storage mode will be more convenient for the majority of users, especially when there is a high volume of anticipated responses. You will no longer have to manage or manually collate your form responses from your email inbox. Storage mode is permissible for data with "Restricted" classification and "Sensitive Normal" sensitivity.
 
-However, you should choose Email mode if 
+However, you should choose Email mode if
+
 - your data is classified "Confidential" or "Sensitive High"
 - you require MyInfo fields or emailed response copies to respondents
 
@@ -92,7 +124,7 @@ You will have to duplicate your Email mode form and recreate it as a Storage mod
 
 You and any collaborators will need this secret key to activate your form and access form responses. [Learn more about secret keys](https://guide.form.gov.sg/AdvancedGuide.html#what-is-a-secret-key).
 
-Note that if you lose your secret key, your form responses will be __permanently lost__. [Here's how to avoid accidentally losing your secret key.](https://guide.form.gov.sg/AdvancedGuide.html#how-do-i-make-sure-i-dont-lose-my-secret-key)
+Note that if you lose your secret key, your form responses will be **permanently lost**. [Here's how to avoid accidentally losing your secret key.](https://guide.form.gov.sg/AdvancedGuide.html#how-do-i-make-sure-i-dont-lose-my-secret-key)
 
 ![FormSG FAQ Storage Download Key](https://s3-ap-southeast-1.amazonaws.com/misc.form.gov.sg/faq-storage-downloadkey.png "FormSG FAQ Storage Download Key")
 
@@ -126,15 +158,16 @@ Click on each list item to view the full response.
 
 ![Form FAQ Storage Click Response](https://s3-ap-southeast-1.amazonaws.com/misc.form.gov.sg/faq-storage-clickresponse.png "Form FAQ Storage Click Response")
 
-You can also view and download your feedback data in the Feedback tab. 
+You can also view and download your feedback data in the Feedback tab.
 
 ![Form FAQ Storage View Feedback](https://s3-ap-southeast-1.amazonaws.com/misc.form.gov.sg/faq-storage-viewfeedback.png "Form FAQ Storage View Feedback")
 
 ### What is a secret key?
 
-Your secret key is a string of text and numbers used to encrypt and decrypt your form responses. Each secret key unlocks the responses to **one** form only. No one will be able to view your form responses unless they have your Secret Key. 
+Your secret key is a string of text and numbers used to encrypt and decrypt your form responses. Each secret key unlocks the responses to **one** form only. No one will be able to view your form responses unless they have your Secret Key.
 
 You will need your secret key at 3 points in your Form journey:
+
 - Form creation: download secret key
 - Form activation: enter/upload secret key
 - Access responses: enter/upload Secret Key
@@ -151,15 +184,16 @@ If you have lost your secret key, take these steps immediately:
 
 3. If you have created multiple forms with similar titles in the past, it is possible that you have confused the different forms' secret keys with each other, as form titles are in the secret keys' filenames. Try all secret keys with similar filenames on your form.
 
-4. If you remember sending an email to share your secret key with collaborators, search the Sent folder in your email for the keyword 'secret key' and your form title. 
+4. If you remember sending an email to share your secret key with collaborators, search the Sent folder in your email for the keyword 'secret key' and your form title.
 
-5. If you still cannot find your secret key and would like our help to debug this further, contact us on our [help form](https://go.gov.sg/form-help). 
+5. If you still cannot find your secret key and would like our help to debug this further, contact us on our [help form](https://go.gov.sg/form-help).
 
 Without your secret key, you will not be able to access your existing response data. Additionally, it's not possible for us to recover your lost secret key or response data on your behalf. This is because Form does not retain your secret key or any other way to unlock your encrypted data - the only way to ensure response data is truly private to agencies only. This is an important security benefit, because that means even if our server were to be compromised, an attacker would never be able to unlock your encrypted responses.
 
 ### How do I make sure I don't lose my secret key?
 
 To make sure you don't lose your secret key(s), and permanently lose access to your form responses, you can
+
 - Share secret key(s) with colleagues that are also authorised to view form responses;
 - Store secret key(s) in a third-party password manager tool, if your agency uses one;
 - Store multiple secret keys and associated form links on a spreadsheet in your government-issued laptop;
@@ -167,8 +201,8 @@ To make sure you don't lose your secret key(s), and permanently lose access to y
 
 ### What if my secret key has been accidentally circulated?
 
-1. Promptly back-up your form data by downloading form responses and feedback from Form. 
-2. Duplicate your old form and publish a new form with a new secret key, and continue gathering responses with this new form. 
+1. Promptly back-up your form data by downloading form responses and feedback from Form.
+2. Duplicate your old form and publish a new form with a new secret key, and continue gathering responses with this new form.
 3. When you have done Steps 1-2, email us to delete encrypted responses from the old form so that no one will be able to access your responses with the leaked secret key.
 
 ### Is there a storage limit for Storage mode?
@@ -179,7 +213,7 @@ No. There have been forms with over a million submissions on Storage mode. In th
 
 For audit reasons, deleting responses is not allowed. However, if you wish to reset your response count to zero after testing your form, you can simply duplicate your test form and create another Storage mode form. You can then use your new form as your live form instead.
 
-### What is the storage duration? How long will my responses be stored for? 
+### What is the storage duration? How long will my responses be stored for?
 
 Form will store your encrypted responses permanently, and they will be accessible as long as you have the secret key.
 
@@ -187,7 +221,7 @@ If you no longer need to access your form responses, you can simply discard your
 
 ### How does end-to-end encryption work?
 
-When a respondent submits a response, response data is encrypted in the respondent's browser before being sent to our servers for storage. This means that by the time Form's servers receive responses, they have already been scrambled and are stored in this unreadable form. Your response data remains in this encrypted state until you decrypt your responses with your secret key, transforming them into a readable format. 
+When a respondent submits a response, response data is encrypted in the respondent's browser before being sent to our servers for storage. This means that by the time Form's servers receive responses, they have already been scrambled and are stored in this unreadable form. Your response data remains in this encrypted state until you decrypt your responses with your secret key, transforming them into a readable format.
 
 The benefit of end-to-end encryption is that response data enters and remains in Form's servers in an encrypted state. This ensures that even if our servers are compromised by an attack, attackers will still not be able to decrypt and view your response data, as they do not possess your secret key.
 
@@ -196,10 +230,11 @@ The benefit of end-to-end encryption is that response data enters and remains in
 ### Who can see my form responses in Storage mode?
 
 To view responses from Storage mode forms, you have to
+
 - be a form owner or collaborator, **and**
 - know the secret key generated at form creation
 
-The secret key is the **only way** to view your responses in a readable format. As Form's servers do not store your secret key, no one can view your response data, except you and collaborators that you share the secret key with. Even Form developers and administrators with full access to the server cannot view your response data, as we do not possess your secret key. 
+The secret key is the **only way** to view your responses in a readable format. As Form's servers do not store your secret key, no one can view your response data, except you and collaborators that you share the secret key with. Even Form developers and administrators with full access to the server cannot view your response data, as we do not possess your secret key.
 
 ### Can I enable both Storage and Email mode?
 
@@ -209,7 +244,7 @@ You may select either Storage or Email mode for a single form, but not both.
 
 ### What is Email mode?
 
-Storage mode is a method of receiving form responses. Form admins can choose between `Storage mode` and `Email mode` for each form. 
+Storage mode is a method of receiving form responses. Form admins can choose between `Storage mode` and `Email mode` for each form.
 
 If you select Email mode, your form responses will be sent to email addresses that you specify. Form will not store your form responses for security purposes.
 
@@ -218,20 +253,21 @@ Email mode is permissible for individual responses classified Restricted Sensiti
 ### When should I choose Email mode?
 
 You should choose Email mode if
+
 - your data is Confidential or Sensitive High
 - you require MyInfo fields, or emailed response copies to your respondent
 
-In most other situations, Storage mode is expected to be more convenient,  especially for forms with a high volume of anticipated responses.
+In most other situations, Storage mode is expected to be more convenient, especially for forms with a high volume of anticipated responses.
 
 ### How do I ensure my form responses will not bounce?
 
 If your mailbox is full or your email address is no longer valid, form responses will bounce and be permanently lost. Here are some ways to prevent this:
 
-1. Set up auto-archiving on your mailbox to ensure that your mailbox will never hit full capacity. 
+1. Set up auto-archiving on your mailbox to ensure that your mailbox will never hit full capacity.
 
    You can set up auto-archiving in your Outlook by navigating to `File` > `Options` (left) > `Advanced` (left) > `AutoArchive Settings` (right). Run `AutoArchive` as often as you expect your mailbox to be full - if you expect high response volume, you can run `AutoArchive` every day.
 
-2. Enter 2 or more email addresses where responses will be sent, for all your Email mode forms. 
+2. Enter 2 or more email addresses where responses will be sent, for all your Email mode forms.
 
    You can find this setting by logging in to form.gov.sg, clicking on your form, navigating to `Settings` > `Emails where responses will be sent`.
 
@@ -299,13 +335,13 @@ To track number of submissions at your e-service ID you may visit the Billing Pa
 
 ![Form FAQ Billing Panel E-service ID](https://s3-ap-southeast-1.amazonaws.com/misc.form.gov.sg/faq-billing-eservice.png "Form FAQ Billing Panel E-service ID")
 
-It is up to you to decide if you want 2FA or 1FA e-service ID. For CorpPass, it is also up to you to decide whether you want authorisation work flows at your e-service ID. Consult SPCP rep on this if you have concerns. 
+It is up to you to decide if you want 2FA or 1FA e-service ID. For CorpPass, it is also up to you to decide whether you want authorisation work flows at your e-service ID. Consult SPCP rep on this if you have concerns.
 
 ## Webhooks
 
 ### What are webhooks, and why are they useful?
 
-Webhooks are a standard means for applications like Form to send real-time data to other applications and servers. As of May 2020, webhooks are available on Storage mode and can be used by agencies to securely integrate form data collection into the rest of their existing IT workflows. 
+Webhooks are a standard means for applications like Form to send real-time data to other applications and servers. As of May 2020, webhooks are available on Storage mode and can be used by agencies to securely integrate form data collection into the rest of their existing IT workflows.
 
 Webhooks are useful for agencies who wish to have form response data sent directly to existing IT systems. This removes the need for a human user to periodically export form response data from form.gov.sg, then upload it to an internally-used application.
 
@@ -314,15 +350,17 @@ While webhooks have been tried and tested on high-volume applications, this feat
 ### Who should use webhooks?
 
 Webhooks are worth considering if your agency
+
 - expects to receive a high volume of responses
 - needs to integrate internal systems/workflows with form data collection (e.g. sorting responses, and channeling them to specific officers for case management)
 - has IT expertise capable of using our software development kit to prepare an endpoint for receiving response data
 
-Webhooks are not necessary or beneficial in most form use cases, where officers are following up over email or Excel spreadsheet, since Form already outputs responses in those formats. 
+Webhooks are not necessary or beneficial in most form use cases, where officers are following up over email or Excel spreadsheet, since Form already outputs responses in those formats.
 
 ### Are webhooks secure?
 
-Yes - as webhooks are a Storage mode feature, your data is [end-to-end encrypted](https://guide.form.gov.sg/AdvancedGuide.html#how-does-end-to-end-encryption-work) as with all Storage mode responses. Our [software development kit](https://github.com/opengovsg/formsg-javascript-sdk) (SDK) provides instructions on setting up your receiving system to 
+Yes - as webhooks are a Storage mode feature, your data is [end-to-end encrypted](https://guide.form.gov.sg/AdvancedGuide.html#how-does-end-to-end-encryption-work) as with all Storage mode responses. Our [software development kit](https://github.com/opengovsg/formsg-javascript-sdk) (SDK) provides instructions on setting up your receiving system to
+
 - verify that each submission was sent by Form and not any other server
 - decrypt submissions using the secret key that only you own
 
@@ -337,30 +375,30 @@ Pre-requisite: You must be able to expose a HTTPS endpoint that is accessible ov
 3. Test that responses are received at your endpoint URL.
 
 **Important to note**
+
 - Webhooks are still in **beta**, meaning users should expect bugs as we work on smoothing out the rough edges. **If you are unable to accept this risk, please do not use this feature until its mainstream release (end Q3 CY2020).**
 - Please lock down the version of the SDK you are using and disable automatic upgrades to avoid disruption from breaking changes.
-- You are responsible for correctly setting up your system to receive, verify and decrypt Form responses using our SDK. Form is not responsible for your setup, and only bears responsibility for ensuring our servers are correctly routing responses in accordance with our SDK. 
+- You are responsible for correctly setting up your system to receive, verify and decrypt Form responses using our SDK. Form is not responsible for your setup, and only bears responsibility for ensuring our servers are correctly routing responses in accordance with our SDK.
 
 ### There is a problem and my system is not receiving data from Form. Are my responses lost?
 
 Your responses are not lost as all Storage mode responses are stored encrypted in Form's database. As with all Storage mode forms, you can retrieve your data by simply logging in to Form and using your secret key to decrypt and export responses in .csv format.
 
-
 ## Verified SMS Paid Service
 
-The Verified SMS feature on the Mobile Phone field triggers an SMS containing a One-Time Password (OTP) to the entered mobile phone number, so that form respondents can verify that the entered number belongs to them. 
+The Verified SMS feature on the Mobile Phone field triggers an SMS containing a One-Time Password (OTP) to the entered mobile phone number, so that form respondents can verify that the entered number belongs to them.
 
 ### Do I have to pay for Verified SMS?
 
-Verified SMS is free up to 10,000 responses per form. 
+Verified SMS is free up to 10,000 responses per form.
 
-**However, if your form might receive over 10,000 responses, your agency will have to pay for verified SMS by setting up your own Twilio account** (see instructions below). To be safe, please arrange payment before activating your form. Once your form has exceeded 10,000 responses, either the Verified SMS feature or the form itself will have to be deactivated, and Form reserves the right to charge your agency for past SMS expenditure. 
+**However, if your form might receive over 10,000 responses, your agency will have to pay for verified SMS by setting up your own Twilio account** (see instructions below). To be safe, please arrange payment before activating your form. Once your form has exceeded 10,000 responses, either the Verified SMS feature or the form itself will have to be deactivated, and Form reserves the right to charge your agency for past SMS expenditure.
 
 ### How do I arrange payment for Verified SMS?
 
-We recommend that you arrange payment before activating your form, in case a high volume of responses are submitted and bust your free tier. Once your form has exceeded 10,000 responses, either the Verified SMS feature or the form itself will have to be deactivated, and Form reserves the right to charge your agency for past SMS expenditure. 
+We recommend that you arrange payment before activating your form, in case a high volume of responses are submitted and bust your free tier. Once your form has exceeded 10,000 responses, either the Verified SMS feature or the form itself will have to be deactivated, and Form reserves the right to charge your agency for past SMS expenditure.
 
-**Step 1**. Obtain approval within your agency to pay for verified SMS through Twilio. [Twilio](https://www.twilio.com/) is the paid SMS service that Form uses to send OTP verification SMSes to mobile numbers. Twilio is the only SMS service provider that Form is integrated with, and provides paid SMS at a competitive price. Twilio's SMSes cost 0.03 USD (3 cents USD) per SMS. 
+**Step 1**. Obtain approval within your agency to pay for verified SMS through Twilio. [Twilio](https://www.twilio.com/) is the paid SMS service that Form uses to send OTP verification SMSes to mobile numbers. Twilio is the only SMS service provider that Form is integrated with, and provides paid SMS at a competitive price. Twilio's SMSes cost 0.03 USD (3 cents USD) per SMS.
 
 **Step 2**. Create an account at https://twilio.com, and set up payment to your agency. Set up the rest of your account according to the instructions below in the 'Twilio account setup' section.
 
@@ -374,16 +412,14 @@ iii. API Key Secret
 
 iv. Messaging Service SID
 
-
 ### Twilio account setup
 
 #### Account SID
 
-Upon logging in, you should be able to see your **account SID** on the dashboard when you arrived on Twilio's console. 
+Upon logging in, you should be able to see your **account SID** on the dashboard when you arrived on Twilio's console.
 
 ![Twilio Dashboard](https://s3-ap-southeast-1.amazonaws.com/misc.form.gov.sg/twilio-dashboard.png)
 📌 Item 1: We will need your Account SID from this step.
-
 
 #### Set up API Key
 
@@ -400,12 +436,11 @@ You will need to pass us your **SID** and **secret**. Please keep these safe. Re
 ![SID and Secret key](https://s3-ap-southeast-1.amazonaws.com/misc.form.gov.sg/secret-key-twilio.png)
 📌 Items 2 and 3: We will need your API Key SID and Secret from this step.
 
-
 #### Buy a phone number
 
-You need to purchase a phone number to start sending SMSes. 
+You need to purchase a phone number to start sending SMSes.
 
-We recommend buying a US number ($1 a month) and masking the number with an [alphanumeric sender ID](https://support.twilio.com/hc/en-us/articles/223181348-Getting-Started-with-Alphanumeric-Sender-ID-for-Twilio-Programmable-SMS/). A Singapore phone number is $75 per month but a Singapore number is not required to send Singapore SMSes. 
+We recommend buying a US number ($1 a month) and masking the number with an [alphanumeric sender ID](https://support.twilio.com/hc/en-us/articles/223181348-Getting-Started-with-Alphanumeric-Sender-ID-for-Twilio-Programmable-SMS/). A Singapore phone number is $75 per month but a Singapore number is not required to send Singapore SMSes.
 
 Click on the button with 3 dots on the left side menu and then click on **Phone Numbers**
 
@@ -424,7 +459,6 @@ Once you have bought a phone number, you can configure the Alphanumeric Sender I
 You can do this by navigating to Programmable SMS > Messaging Service > Select the name of the Messaging Service > Features > Add sender > Add Alpha Sender
 
 Alternatively, you may wish to watch the video on [Postman.gov.sg's workplace group](https://onepublicservice.workplace.com/groups/postman.gov.sg/permalink/2716726868596347/) on adding an Alpha Sender ID.
-
 
 #### Set up Messaging Service
 
@@ -451,7 +485,6 @@ Now, your phone number will be added to the messaging service. Go back to the me
 ![msg service 2](https://s3-ap-southeast-1.amazonaws.com/misc.form.gov.sg/msg-service-2.jpg)
 📌 Item 4: We will need your Messaging Service SID from this step.
 
-
 ## Other
 
 I did not receive my OTP. Where is it?
@@ -468,7 +501,7 @@ Prior to the launch of Storage mode, we did not enable draft-saving functionalit
 
 ### I am leaving the organisation or switching over to a new email. How do I transfer ownership of my forms?
 
-You can transfer ownership on the top right hand corner of each form by clicking the round Add Collaborator button. 
+You can transfer ownership on the top right hand corner of each form by clicking the round Add Collaborator button.
 
 Note that you might not need to transfer ownership of your form. You may simply add your colleague as a collaborator. Collaborators have the same rights as form creators, except they cannot delete the form.
 
@@ -476,7 +509,7 @@ Note that you might not need to transfer ownership of your form. You may simply 
 
 ### The previous form administrator has left the department without transferring their forms or adding collaborators. Their email address is no longer valid. How can we regain access to their forms?
 
-Obtain internal approval and make a request to your IT Department to temporarily reinstate the email address of the previous form admin, so that you can log in to form.gov.sg using their email to transfer their forms. You can transfer ownership on the top right hand corner of each form by clicking the round Add Collaborator button. 
+Obtain internal approval and make a request to your IT Department to temporarily reinstate the email address of the previous form admin, so that you can log in to form.gov.sg using their email to transfer their forms. You can transfer ownership on the top right hand corner of each form by clicking the round Add Collaborator button.
 
 To prevent such incidents from occurring, we strongly recommend that all IT departments add form ownership transfer in offboarding steps for staff leaving the organisation.
 
@@ -502,7 +535,7 @@ Form is built on a MEAN stack (MongoDB, Express.js, AngularJS, Node.js). We will
 
 ### What is Form's infrastructure? How secure is Form?
 
-We have our NodeJS web servers hosted on AWS Singapore zone. Our NoSQL database that stores only form fields and not form data is managed by MongoDB Atlas, and also hosted on AWS Singapore zone. We use AWS SES to send out mails, which are not open mail relays, have valid SPF and DKIM records, and encrypts form data before sending them over to government SGMail. Our web servers are protected with Cloudflare SSL, their Anti-DDoS protection and Web Application Firewall. We use Pingdom for website performance and availability monitoring, and have AWS CloudWatch alarms, together with CloudTrail that monitors activity and GuardDuty for threat intelligence monitoring. Our Data Collation Tool is built with vanilla Javascript and is a static site on S3. 
+We have our NodeJS web servers hosted on AWS Singapore zone. Our NoSQL database that stores only form fields and not form data is managed by MongoDB Atlas, and also hosted on AWS Singapore zone. We use AWS SES to send out mails, which are not open mail relays, have valid SPF and DKIM records, and encrypts form data before sending them over to government SGMail. Our web servers are protected with Cloudflare SSL, their Anti-DDoS protection and Web Application Firewall. We use Pingdom for website performance and availability monitoring, and have AWS CloudWatch alarms, together with CloudTrail that monitors activity and GuardDuty for threat intelligence monitoring. Our Data Collation Tool is built with vanilla Javascript and is a static site on S3.
 
 We have undergone rigorous penetration testing, vulnerability assessment and infrastructure review by both world renowned security testers and CSG. Our [July 2020 pentest report](https://go.gov.sg/form-pentest) by renowned security firm Cure53 found a solid security standing. We have also written a >74 page NIST security review documenting our security best practices.
 
